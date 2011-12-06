@@ -31,7 +31,7 @@ void TjawParser::Parsuj(TJAW * tjaw)
 
                 if(!wiersz.toStdString().find(">end")) //jesli koniec trajektorii
                 {
-                    cout << "znalazlem koniec trajektorii\n";
+                    //cout << "znalazlem koniec trajektorii\n";
                     for(int i=0; i<linie.size(); i++)
                     {
                         tjaw->wiersze.append(new Wiersz());
@@ -74,9 +74,9 @@ void TjawParser::Parsuj(TJAW * tjaw)
 
                     }
                     //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
-                    //tjaw->erase();
-                    cout << "wierszy: "<<tjaw->wiersze.size() <<endl ;
+                    //cout << "wierszy: "<<tjaw->wiersze.size() << endl ;
                     tjaw->erase();
+                    linie.clear();
 
                 }
                 else
@@ -84,8 +84,8 @@ void TjawParser::Parsuj(TJAW * tjaw)
 
 
             }
-            else
-                cout << "\nkomentarz: " << wiersz.toStdString() << endl;
+           // else
+                //cout << "\nkomentarz: " << wiersz.toStdString() << endl;
         }
     }
     cout << "\nSkonczylem parsowac\n";

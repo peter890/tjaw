@@ -14,7 +14,7 @@ TJAW::TJAW()
 */
 
 }
-void TJAW::createPole(QString nazwa, QString wartosc)
+Pole* TJAW::createPole(QString nazwa, QString wartosc)
 {
     bool isNumber = false;
 
@@ -22,12 +22,25 @@ void TJAW::createPole(QString nazwa, QString wartosc)
     number = wartosc.toDouble(&isNumber); //funkcja toDouble zwraca przez parametr informacje(bool) o tym czy udalo sie przekonwertowac QStringa na Double
     if(isNumber)
     {
-        wiersz.pola.append(new PoleNum(nazwa,number));
+        return new PoleNum(nazwa,number);
         //cout << wartosc.toStdString() << " jest liczba: "<< isNumber << endl;
     }
     else
     {
-       wiersz.pola.append(new PoleTxt(nazwa,wartosc));
+       return new PoleTxt(nazwa,wartosc);
+    }
+
+}
+void TJAW::erase()
+{
+    this->naglowek.erase();
+    for(int i=0; i<this->wiersze.size(); i++)
+        wiersze[i]->erase();
+    QVector<Wiersz*>::iterator it;
+    for(it=wiersze.begin(); it!=wiersze.end();)
+    {
+        delete (*it);
+        it = wiersze.erase(it);
     }
 
 }
