@@ -23,6 +23,11 @@ void Naglowek::wstawPole(QString nazwa, QString wartosc)
 
 void Naglowek::erase()
 {
-    this->pola.clear();
+    QVector<Pole*>::iterator it;
+    for(it=pola.begin(); it!=pola.end();)
+    {
+        delete (*it);
+        it = pola.erase(it);
+    }
 }
 

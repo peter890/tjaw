@@ -8,8 +8,10 @@ class Wiersz
 {
 public:
     Wiersz();
+    Wiersz(Pole*);
     QVector<Pole*> pola;
-    void wyczysc();
+    void wstawPole(QString nazwa, QString wartosc);
+    void erase();
     QString echoWiersz();
     int size(){return pola.size();}
 

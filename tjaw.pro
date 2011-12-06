@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     polenum.cpp \
     wiersz.cpp \
     tjaw.cpp \
-    tjawparser.cpp
+    tjawparser.cpp \
+    naglowek.cpp
 
 HEADERS += \
     pole.h \
@@ -28,5 +29,5 @@ HEADERS += \
     polenum.h \
     wiersz.h \
     tjaw.h \
-    headers.h \
-    tjawparser.h
+    tjawparser.h \
+    naglowek.h

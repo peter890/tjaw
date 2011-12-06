@@ -26,18 +26,19 @@ void TjawParser::Parsuj(TJAW * tjaw)
         {
             wiersz = in.readLine(); //czytaj wiersz
 
+
             if(wiersz.toStdString().find(":")) //dopisac kolejne mozliwe znaczniki komentarzy
             {
 
                 if(!wiersz.toStdString().find(">end")) //jesli koniec trajektorii
                 {
-                    cout << "znalazlem koniec trajektorii\n";
+                    //cout << "znalazlem koniec trajektorii\n";
                     for(int i=0; i<linie.size(); i++)
                     {
                         tjaw->wiersze.append(new Wiersz());
                         QString linia(linie[i]);
                         QString pole_nazwa, pole_wartosc;
-                        bool czyToNazwa = true;
+                        bool czyToNazwa = true;//
 
                         for(int j=0; j<=linia.size()+1; j++)
                         {
@@ -74,9 +75,9 @@ void TjawParser::Parsuj(TJAW * tjaw)
 
                     }
                     //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
-                    //tjaw->erase();
-                    cout << "wierszy: "<<tjaw->wiersze.size() <<endl ;
+                    //cout << "wierszy: "<<tjaw->wiersze.size() << endl ;
                     tjaw->erase();
+                    linie.clear();
 
                 }
                 else
@@ -84,8 +85,8 @@ void TjawParser::Parsuj(TJAW * tjaw)
 
 
             }
-            else
-                cout << "\nkomentarz: " << wiersz.toStdString() << endl;
+           // else
+                //cout << "\nkomentarz: " << wiersz.toStdString() << endl;
         }
     }
     cout << "\nSkonczylem parsowac\n";
