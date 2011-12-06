@@ -34,6 +34,7 @@ void TjawParser::Parsuj(TJAW * tjaw)
                     cout << "znalazlem koniec trajektorii\n";
                     for(int i=0; i<linie.size(); i++)
                     {
+                        tjaw->wiersze.append(new Wiersz());
                         QString linia(linie[i]);
                         QString pole_nazwa, pole_wartosc;
                         bool czyToNazwa = true;
@@ -54,8 +55,14 @@ void TjawParser::Parsuj(TJAW * tjaw)
 
                                 if(linia[j+1] == ' ' || j == linia.length())
                                 {
-                                    cout << "|"<< pole_nazwa.toStdString() << "=[" << pole_wartosc.toStdString() << "]";
-                                    tjaw->createPole(pole_nazwa.trimmed(),pole_wartosc.trimmed()); //tworzenie obiektu pole
+                                    //cout << "|"<< pole_nazwa.toStdString() << "=[" << pole_wartosc.toStdString() << "]";
+                                    if(i == 0)
+                                    {
+                                        tjaw->naglowek.wstawPole(pole_nazwa.trimmed(),pole_wartosc.trimmed());
+                                    }
+                                    else
+                                        tjaw->wiersze.at(tjaw->wiersze.size()-1)->wstawPole(pole_nazwa.trimmed(),pole_wartosc.trimmed()); //tworzenie obiektu pole
+
                                     pole_nazwa.clear(); //czyszczenie zmiennych lokalnych
                                     pole_wartosc.clear();
                                     czyToNazwa = true;
@@ -63,9 +70,14 @@ void TjawParser::Parsuj(TJAW * tjaw)
                             }
 
                         }
-                        cout << endl;
+                        //cout << endl;
 
                     }
+                    //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
+                    //tjaw->erase();
+                    cout << "wierszy: "<<tjaw->wiersze.size() <<endl ;
+                    tjaw->erase();
+
                 }
                 else
                     linie.push_back(wiersz);
