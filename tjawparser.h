@@ -12,6 +12,7 @@ class TjawParser
 public:
     TjawParser(QString fileName);
     void Parsuj(TJAW*);
+    //void wykonajObliczeniaTraj(int* functions[]);
 private:
     QVector<QString> linie;
     QString wiersz;

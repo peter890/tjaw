@@ -2,6 +2,7 @@
 #include <QRegExp>
 #include <QFile>
 #include<QTextStream>
+#include "logger.h"
 
 #include <iostream>
 #include <fstream>
@@ -22,15 +23,17 @@ void TjawParser::Parsuj(TJAW * tjaw)
     QTextStream in(&plik); //tworzy strumien na podstawie uchwytu
     if(plik.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+        Logger::getInstance()->logguj("otworzylem plik: " + fileName);
         while(!in.atEnd()) // jesli nie koniec pliku
         {
             wiersz = in.readLine(); //czytaj wiersz
 
 
+
             if(wiersz.toStdString().find(":")) //dopisac kolejne mozliwe znaczniki komentarzy
             {
 
-                if(!wiersz.toStdString().find(">end")) //jesli koniec trajektorii
+                if(!wiersz.toStdString().find(">end") || wiersz.isEmpty() ) //jesli koniec trajektorii
                 {
                     //cout << "znalazlem koniec trajektorii\n";
                     for(int i=0; i<linie.size(); i++)
@@ -62,7 +65,11 @@ void TjawParser::Parsuj(TJAW * tjaw)
                                         tjaw->naglowek.wstawPole(pole_nazwa.trimmed(),pole_wartosc.trimmed());
                                     }
                                     else
+                                    {
                                         tjaw->wiersze.at(tjaw->wiersze.size()-1)->wstawPole(pole_nazwa.trimmed(),pole_wartosc.trimmed()); //tworzenie obiektu pole
+                                        //if(PoleNum* num = dynamic_cast<PoleNum*>(tjaw->wiersze.at(i)->pola.at())){ cout << "wartosc " << num->getWartosc();}
+                                    }
+
 
                                     pole_nazwa.clear(); //czyszczenie zmiennych lokalnych
                                     pole_wartosc.clear();
@@ -71,9 +78,12 @@ void TjawParser::Parsuj(TJAW * tjaw)
                             }
 
                         }
-                        //cout << endl;
 
+                        //cout << endl;
+                        //if(i==1 && i <linie.size()) Logger::getInstance()->logguj(tjaw->naglowek.pola.at(1)->getNazwa() + " = " + tjaw->naglowek.pola.at(1)->getStrWartosc());
                     }
+
+
                     //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
                     //cout << "wierszy: "<<tjaw->wiersze.size() << endl ;
                     tjaw->erase();
@@ -91,4 +101,5 @@ void TjawParser::Parsuj(TJAW * tjaw)
     }
     cout << "\nSkonczylem parsowac\n";
 }
+
 
