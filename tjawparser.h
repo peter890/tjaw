@@ -5,6 +5,7 @@
 #include <QString>
 #include <string>
 #include "tjaw.h"
+#include "functions.h"
 using namespace std;
 
 class TjawParser

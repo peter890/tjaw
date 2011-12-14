@@ -7,7 +7,7 @@ public:
     PoleTxt(QString nazwa, QString wartosc);
     void setWartosc(QString wartosc);
     QString getWartosc();
-    virtual QString StrWartosc();
+    virtual QString getStrWartosc();
 private:
     QString _wartosc;
 };

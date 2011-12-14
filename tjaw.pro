@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     tjaw.cpp \
     tjawparser.cpp \
     naglowek.cpp \
-    logger.cpp
+    logger.cpp \
+    functions.cpp
 
 HEADERS += \
     pole.h \
@@ -32,4 +33,5 @@ HEADERS += \
     tjaw.h \
     tjawparser.h \
     naglowek.h \
-    logger.h
+    logger.h \
+    functions.h

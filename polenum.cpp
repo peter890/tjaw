@@ -13,7 +13,7 @@ double PoleNum::getWartosc()
 {
     return _wartosc;
 }
-QString PoleNum::StrWartosc()
+QString PoleNum::getStrWartosc()
 {
     QString tmp;
     return tmp.setNum(this->_wartosc);

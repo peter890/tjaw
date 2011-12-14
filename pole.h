@@ -6,7 +6,7 @@ class Pole
 public:
     Pole(QString nazwa){this->nazwa = nazwa;}
     QString getNazwa(){return nazwa;}
-    virtual QString StrWartosc(){return "";}
+    virtual QString getStrWartosc(){return "";}
     void setNazwa(QString nazwa){this->nazwa = nazwa;}
 
 private:

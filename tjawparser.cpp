@@ -3,7 +3,7 @@
 #include <QFile>
 #include<QTextStream>
 #include "logger.h"
-
+#include "tjawparser.h"
 #include <iostream>
 #include <fstream>
 

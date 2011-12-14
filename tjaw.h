@@ -2,6 +2,7 @@
 #define TJAW_H
 #include "wiersz.h"
 #include "naglowek.h"
+#include "pole.h"
 #include <stdio.h>
 #include <iostream>
 using namespace std;

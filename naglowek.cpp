@@ -31,3 +31,13 @@ void Naglowek::erase()
     }
 }
 
+QString Naglowek::echo()
+{
+    QString naglowek;
+    for(int i=0; i< pola.size(); i++)
+    {
+        naglowek.append(pola.at(i)->getNazwa() + "=" + pola.at(i)->getStrWartosc());
+    }
+    return naglowek;
+}
+

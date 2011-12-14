@@ -6,7 +6,7 @@ class PoleNum: public Pole
 public:
     PoleNum(QString nazwa, double wartosc);
     void setWartosc(double wartosc);
-    virtual QString StrWartosc();
+    virtual QString getStrWartosc();
     double getWartosc();
 private:
     double _wartosc;

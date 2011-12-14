@@ -13,6 +13,7 @@ public:
     QVector<Pole*> pola;
     void wstawPole(QString nazwa, QString wartosc);
     void erase();
+    QString echo();
 };
 
 #endif // NAGLOWEK_H

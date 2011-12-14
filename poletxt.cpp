@@ -13,7 +13,7 @@ QString PoleTxt::getWartosc()
 {
     return _wartosc;
 }
-QString PoleTxt::StrWartosc()
+QString PoleTxt::getStrWartosc()
 {
     return this->_wartosc;
 
