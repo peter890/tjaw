@@ -25,9 +25,9 @@ QString Wiersz::echoWiersz()
   QString wiersz;
   for(int i=0; i<pola.size(); i++)
   {
-      wiersz.append(pola[i]->getNazwa() + "=" + pola[i]->StrWartosc() + " ");
+      wiersz.append(pola[i]->getNazwa() + "=" + pola[i]->getStrWartosc() + " ");
   }
-  return wiersz + '\n';
+  return wiersz;
 }
 
 void Wiersz::wstawPole(QString nazwa, QString wartosc)
@@ -46,3 +46,29 @@ void Wiersz::wstawPole(QString nazwa, QString wartosc)
        this->pola.append(new PoleTxt(nazwa,wartosc));
     }
 }
+Pole* Wiersz::getPole(int i)
+{
+    if(i>=0 && i<pola.size())
+    {
+        return pola.at(i);
+    }
+}
+Pole* Wiersz::getPole(QString name)
+{
+    for(int i=0; i<pola.size(); i++)
+    {
+        if(pola.at(i)->getNazwa() == name)
+        {
+            return pola.at(i);
+        }
+    }
+    return NULL;
+
+
+}
+
+
+
+
+
+

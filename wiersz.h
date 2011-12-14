@@ -13,6 +13,8 @@ public:
     void wstawPole(QString nazwa, QString wartosc);
     void erase();
     QString echoWiersz();
+    Pole* getPole(int i);
+    Pole* getPole(QString name);
     int size(){return pola.size();}
 
 };
