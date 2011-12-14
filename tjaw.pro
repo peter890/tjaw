@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     wiersz.cpp \
     tjaw.cpp \
     tjawparser.cpp \
-    naglowek.cpp
+    naglowek.cpp \
+    logger.cpp
 
 HEADERS += \
     pole.h \
@@ -30,4 +31,5 @@ HEADERS += \
     wiersz.h \
     tjaw.h \
     tjawparser.h \
-    naglowek.h
+    naglowek.h \
+    logger.h
