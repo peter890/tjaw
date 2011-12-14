@@ -4,7 +4,7 @@
 class Functions
 {
 public:
-    Functions(){}
+
     Functions(TJAW* _obj);
     void suma(QString _nazwaPolaIn, QString nazwaPolaOut);
 protected:
