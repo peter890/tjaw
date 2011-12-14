@@ -15,10 +15,7 @@ TjawParser::TjawParser(QString fileName)
 }
 void TjawParser::Parsuj(TJAW * tjaw)
 {
-    //QRegExp rem("\s*:\s*");
-    //QRegExp end(">end");
-    //rem.setPatternSyntax(QRegExp::FixedString);
-    //ifstream plik(fileName.toAscii().data());
+    Functions functions(tjaw);
     QFile plik(fileName); //uchwyt do pliku
     QTextStream in(&plik); //tworzy strumien na podstawie uchwytu
     if(plik.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -41,7 +38,7 @@ void TjawParser::Parsuj(TJAW * tjaw)
                         tjaw->wiersze.append(new Wiersz());
                         QString linia(linie[i]);
                         QString pole_nazwa, pole_wartosc;
-                        bool czyToNazwa = true;//
+                        bool czyToNazwa = true;
 
                         for(int j=0; j<=linia.size()+1; j++)
                         {
@@ -83,7 +80,7 @@ void TjawParser::Parsuj(TJAW * tjaw)
                         //if(i==1 && i <linie.size()) Logger::getInstance()->logguj(tjaw->naglowek.pola.at(1)->getNazwa() + " = " + tjaw->naglowek.pola.at(1)->getStrWartosc());
                     }
 
-
+                    functions.suma("asp","aspSum");
                     //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
                     //cout << "wierszy: "<<tjaw->wiersze.size() << endl ;
                     tjaw->erase();
