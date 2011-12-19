@@ -44,3 +44,21 @@ void TJAW::erase()
     }
 
 }
+string TJAW::toString()
+{
+    QString tjaw;
+
+
+    tjaw.append(naglowek.toString());
+    tjaw.append("\n");
+
+
+    for(int i=0; i< wiersze.size(); i++)
+    {
+        tjaw.append(wiersze[i]->toString());
+        tjaw.append("\n");
+    }
+    return tjaw.toStdString();
+
+
+}

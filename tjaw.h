@@ -5,6 +5,7 @@
 #include "pole.h"
 #include <stdio.h>
 #include <iostream>
+#include <string>
 using namespace std;
 class TJAW
 {
@@ -16,6 +17,7 @@ public:
     QVector<Wiersz*> wiersze;
     Naglowek naglowek;
     void erase();
+    string toString();
 };
 
 #endif // TJAW_H
