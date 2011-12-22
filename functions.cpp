@@ -23,6 +23,7 @@ void Functions::suma(QString nazwaPolaIn, QString nazwaPolaOut)
     }
 
     obj->naglowek.wstawPole(nazwaPolaOut,num.number(sum));
+     Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Wykonano 'suma' dla pola '"+ nazwaPolaIn +"'");
 
     //zapisDoPliku(settings->value("ZlaczeniePlikow/nazwaPliku"));
 
@@ -46,13 +47,15 @@ void Functions::uruchomFunkcjeDlaTjaw()
             settings->setArrayIndex(i);
             in = settings->value("kolumnaIn").toString();
             out = settings->value("kolumnaOut").toString();
-            cout << "suma IN: " << in.toStdString() << " || OUT: " << out.toStdString()<< endl;
+            //cout << "suma IN: " << in.toStdString() << " || OUT: " << out.toStdString()<< endl;
             this->suma(in,out);
-            cout << obj->toString() <<endl;
+
         }
         settings->endArray();
 
     }
+    cout << obj->toString() <<endl;
+    cout << ">end";
 
 }
 void Functions::zapisDoPliku(QString nazwaPliku)

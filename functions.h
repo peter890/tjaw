@@ -4,6 +4,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QTextStream>
+#include "logger.h"
 class Functions
 {
 public:

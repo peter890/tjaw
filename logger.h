@@ -2,6 +2,7 @@
 #define LOGGER_H
 #include <QFile>
 #include <QTextStream>
+#include "QDateTime"
 class Logger
 {
 private:

@@ -79,22 +79,21 @@ void TjawParser::Parsuj(TJAW * tjaw)
                                 }
 
                             }
-
-                            //cout << endl;
-                            //if(i==1 && i <linie.size()) Logger::getInstance()->logguj(tjaw->naglowek.pola.at(1)->getNazwa() + " = " + tjaw->naglowek.pola.at(1)->getStrWartosc());
                         }
 
-                        //functions.suma("asp","aspSum");
-                        functions.uruchomFunkcjeDlaTjaw();
+                        Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Uruchomiono funkcje dla trajektorii: " + tjaw->naglowek.toString());
+                                               functions.uruchomFunkcjeDlaTjaw();
+                                               Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zakonczone funkcje dla trajektorii" + "\n");
+
 
 
 
                         //--------------------- WYSWIETLANIE ------------------
-                        /*cout << tjaw->naglowek.toString().toStdString();
+                        cout << tjaw->naglowek.toString().toStdString();
 
                         for(int i=0; i< tjaw->wiersze.size(); i++)
                             cout << tjaw->wiersze[i]->toString().toStdString() << endl;
-*/
+
 
 
                         //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
@@ -112,7 +111,9 @@ void TjawParser::Parsuj(TJAW * tjaw)
             //cout << "\nkomentarz: " << wiersz.toStdString() << endl;
         }
     }
-    cout << "\nSkonczylem parsowac\n";
+    //cout << "\nSkonczylem parsowac\n";
+    plik.close();
+        Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zamknieto plik: " + fileName);
 }
 
 
