@@ -17,7 +17,7 @@ void Naglowek::wstawPole(QString nazwa, QString wartosc)
     }
     else
     {
-       this->pola.push_back(new PoleTxt(nazwa,wartosc));
+        this->pola.push_back(new PoleTxt(nazwa,wartosc));
     }
 }
 
@@ -31,13 +31,19 @@ void Naglowek::erase()
     }
 }
 
-QString Naglowek::echo()
+
+QString Naglowek::toString()
 {
     QString naglowek;
     for(int i=0; i< pola.size(); i++)
     {
-        naglowek.append(pola.at(i)->getNazwa() + "=" + pola.at(i)->getStrWartosc());
+        if(!pola.at(i)->getNazwa().isEmpty() && !pola.at(i)->getStrWartosc().isEmpty() )
+            naglowek.append(pola.at(i)->getNazwa() + "=" + pola.at(i)->getStrWartosc() + " ");
+        else
+            if(pola.at(i)->getStrWartosc().isEmpty())
+                naglowek.append(pola.at(i)->getNazwa() + " ");
     }
     return naglowek;
 }
+
 

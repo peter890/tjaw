@@ -12,7 +12,7 @@ public:
     QVector<Pole*> pola;
     void wstawPole(QString nazwa, QString wartosc);
     void erase();
-    QString echoWiersz();
+    QString toString();
     Pole* getPole(int i);
     Pole* getPole(QString name);
     int size(){return pola.size();}

@@ -35,3 +35,6 @@ HEADERS += \
     naglowek.h \
     logger.h \
     functions.h
+
+OTHER_FILES += \
+    ../tjaw-build-desktop/config.ini

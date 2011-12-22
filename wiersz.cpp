@@ -20,12 +20,16 @@ void Wiersz::erase()
 
 }
 
-QString Wiersz::echoWiersz()
+QString Wiersz::toString()
 {
   QString wiersz;
   for(int i=0; i<pola.size(); i++)
   {
-      wiersz.append(pola.at(i)->getNazwa() + "=" + pola.at(i)->getStrWartosc() + " ");
+      if(!pola.at(i)->getNazwa().isEmpty() && !pola.at(i)->getStrWartosc().isEmpty() )
+          wiersz.append(pola.at(i)->getNazwa() + "=" + pola.at(i)->getStrWartosc() + " ");
+      else
+      if(pola.at(i)->getStrWartosc().isEmpty())
+          wiersz.append(pola.at(i)->getNazwa() + " ");
   }
   return wiersz;
 }
