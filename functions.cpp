@@ -6,6 +6,14 @@ Functions::Functions(TJAW *_obj)
     this->obj = _obj;
     this->settings = new QSettings("config.ini",QSettings::IniFormat);
 }
+void Functions::Wyswietl(TJAW *_obj)
+{
+    cout << _obj->naglowek.toString().toStdString();
+
+    for(int i=0; i< _obj->wiersze.size(); i++)
+        cout << _obj->wiersze[i]->toString().toStdString() << endl;
+    cout << ">end\n";
+}
 
 void Functions::suma(QString nazwaPolaIn, QString nazwaPolaOut)
 {
@@ -150,6 +158,7 @@ void Functions::zapisDoPliku(QString nazwaPliku)
 void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
 {
     double sumaTmp, srednia, wariancja, odchylenie;
+    QString num;
     int n = dane.size();
 
     for(int i=0; i < n; i++)
@@ -166,6 +175,8 @@ void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
     }
     wariancja = wariancja / n; //licznik przez mianownik
     odchylenie = sqrt(wariancja);
+    obj->naglowek.wstawPole(nazwaPolaOut,num.number(odchylenie));
+
     cout << "\t odchylenie: " << odchylenie << "\n";
     dane.clear();
 

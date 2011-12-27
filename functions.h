@@ -17,6 +17,8 @@ public:
     void suma(QString nazwaPolaIn, QString nazwaPolaOut);
     double suma(QString nazwaPolaIn);
     void odchylenie(QString nazwaPolaIn, QString nazwaPolaOut);
+
+    static void Wyswietl(TJAW* _obj);
 protected:
     TJAW* obj;
     QSettings* settings;

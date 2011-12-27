@@ -87,12 +87,9 @@ void TjawParser::Parsuj(TJAW * tjaw)
 
 
 
-                      /*  //--------------------- WYSWIETLANIE ------------------
-                        cout << tjaw->naglowek.toString().toStdString();
+                        //--------------------- WYSWIETLANIE ------------------
+                        Functions::Wyswietl(tjaw);
 
-                        for(int i=0; i< tjaw->wiersze.size(); i++)
-                            cout << tjaw->wiersze[i]->toString().toStdString() << endl;
-*/
 
 
                         //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
