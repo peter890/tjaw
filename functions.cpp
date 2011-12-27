@@ -5,6 +5,7 @@ Functions::Functions(TJAW *_obj)
     this->obj = _obj;
     this->settings = new QSettings("config.ini",QSettings::IniFormat);
 }
+
 void Functions::suma(QString nazwaPolaIn, QString nazwaPolaOut)
 {
     double sum=0;
@@ -23,21 +24,34 @@ void Functions::suma(QString nazwaPolaIn, QString nazwaPolaOut)
     }
 
     obj->naglowek.wstawPole(nazwaPolaOut,num.number(sum));
-     Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Wykonano 'suma' dla pola '"+ nazwaPolaIn +"'");
-
-    //zapisDoPliku(settings->value("ZlaczeniePlikow/nazwaPliku"));
-
-    //zapisDoPliku("Out_test_q2.dtr");
+    Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Wykonano 'suma' dla pola '"+ nazwaPolaIn +"'");
 
 
+}
+double Functions::suma(QString nazwaPolaIn)
+{
+    double sum=0;
 
+    Wiersz* wiersz;
+
+    for(int w=0; w < obj->wiersze.size(); w++)
+    {
+        wiersz = obj->wiersze.at(w);
+        if(wiersz->getPole(nazwaPolaIn) != NULL)
+        {
+            sum += wiersz->getPole(nazwaPolaIn)->getStrWartosc().toDouble();
+
+        }
+
+    }
+    return sum;
 
 }
 void Functions::uruchomFunkcjeDlaTjaw()
 {
 
     QString in, out;
-
+    //----------------------------------------------------------------------
     if(settings->value("Funkcje/suma").toBool())
     {
         int size = settings->value("Suma/size").toInt();
@@ -54,8 +68,24 @@ void Functions::uruchomFunkcjeDlaTjaw()
         settings->endArray();
 
     }
-    cout << obj->toString() <<endl;
-    cout << ">end";
+    //----------------------------------------------------------------------
+    if(settings->value("Funkcje/odchylenieStd").toBool())
+    {
+        int size = settings->value("Odchylenie/size").toInt();
+        settings->beginReadArray("Odchylenie");
+        for(int i = 0; i < size; i++ )
+        {
+            settings->setArrayIndex(i);
+            in = settings->value("kolumnaIn").toString();
+
+            dane.push_back( (double) this->suma(in));
+
+        }
+        settings->endArray();
+        cout << "rozmiar vectora dane " << dane.size()<< endl;
+    }
+    //cout << obj->toString() <<endl;
+    //cout << ">end";
 
 }
 void Functions::zapisDoPliku(QString nazwaPliku)
@@ -74,4 +104,10 @@ void Functions::zapisDoPliku(QString nazwaPliku)
     }
 
 }
+
+void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
+{
+
+}
+
 

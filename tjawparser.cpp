@@ -70,7 +70,6 @@ void TjawParser::Parsuj(TJAW * tjaw)
                                         else
                                         {
                                             tjaw->wiersze.at(tjaw->wiersze.size()-1)->wstawPole(pole_nazwa.trimmed(),pole_wartosc.trimmed()); //tworzenie obiektu pole
-                                            //if(PoleNum* num = dynamic_cast<PoleNum*>(tjaw->wiersze.at(i)->pola.at())){ cout << "wartosc " << num->getWartosc();}
                                         }
                                         pole_nazwa.clear(); //czyszczenie zmiennych lokalnych
                                         pole_wartosc.clear();
