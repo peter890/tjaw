@@ -81,18 +81,18 @@ void TjawParser::Parsuj(TJAW * tjaw)
                         }
 
                         Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Uruchomiono funkcje dla trajektorii: " + tjaw->naglowek.toString());
-                                               functions.uruchomFunkcjeDlaTjaw();
-                                               Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zakonczone funkcje dla trajektorii" + "\n");
+                        functions.uruchomFunkcjeDlaTjaw();
+                        Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zakonczone funkcje dla trajektorii" + "\n");
 
 
 
 
-                        //--------------------- WYSWIETLANIE ------------------
+                      /*  //--------------------- WYSWIETLANIE ------------------
                         cout << tjaw->naglowek.toString().toStdString();
 
                         for(int i=0; i< tjaw->wiersze.size(); i++)
                             cout << tjaw->wiersze[i]->toString().toStdString() << endl;
-
+*/
 
 
                         //return; //tutaj mozemy dzialac na JEDNEJ KONKRETNEJ
@@ -111,8 +111,9 @@ void TjawParser::Parsuj(TJAW * tjaw)
         }
     }
     //cout << "\nSkonczylem parsowac\n";
+    functions.uruchomFunkcjeDlaPliku();
     plik.close();
-        Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zamknieto plik: " + fileName);
+    Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zamknieto plik: " + fileName);
 }
 
 
