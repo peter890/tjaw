@@ -37,4 +37,4 @@ HEADERS += \
     functions.h
 
 OTHER_FILES += \
-    ../tjaw-build-desktop/config.ini
+    config.ini
