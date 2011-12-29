@@ -98,7 +98,7 @@ functions.uruchomPrzedParsowaniem();
 
 
                         //--------------------- WYSWIETLANIE ------------------
-                        Functions::Wyswietl(tjaw);
+                        //Functions::Wyswietl(tjaw);
 
 
 

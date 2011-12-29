@@ -21,6 +21,7 @@ public:
     double suma(QString nazwaPolaIn);
     void odchylenie(QString nazwaPolaIn, QString nazwaPolaOut);
     void polaczPliki(const QVector<QString> inputFiles, QString outputFile);
+    bool filtruj();
 
     static void Wyswietl(TJAW* _obj);
 protected:

@@ -60,6 +60,7 @@ double Functions::suma(QString nazwaPolaIn)
 void Functions::uruchomFunkcjeDlaTjaw()
 {
 
+
     QString in, out;
     //----------------------------------------------------------------------
     if(settings->value("Funkcje/suma").toBool())
@@ -111,7 +112,7 @@ void Functions::uruchomFunkcjeDlaTjaw()
 
     //cout << obj->toString() <<endl;
     //cout << ">end";
-    this->zapisDoPliku();
+    if(filtruj())this->zapisDoPliku();
 
 }
 void Functions::uruchomFunkcjeDlaPliku()
@@ -252,4 +253,98 @@ void Functions::polaczPliki(const QVector<QString> inputFiles, QString outputFil
     if(log) Logger::getInstance()->logguj("Wykonano laczenie plikow");
 }
 
+bool Functions::filtruj()
+{
+    int size = settings->value("Filtr/size").toInt();
+    QString nazwaPola;
+    bool isNumber;
+    bool isDate;
+    bool isText;
+    bool isTime;
+    bool wynik = true;
+
+    Pole* pole;
+    settings->beginReadArray("Filtr");
+    for(int i = 0; i < size; i++ )
+    {
+        settings->setArrayIndex(i);
+        nazwaPola = settings->value("nazwaPola").toString();
+        pole = obj->naglowek.getPole(nazwaPola);
+        if(pole != NULL)
+        {
+            pole->getStrWartosc().toDouble(&isNumber);
+            cout << "if(isNumber) "<< isNumber << endl;
+            if(isNumber)
+            {
+                settings->value("wiekszeOd").toDouble(&isNumber);
+
+                if(isNumber){
+
+                    if(pole->getStrWartosc().toDouble() > settings->value("wiekszeOd").toDouble())
+                    {wynik = wynik & true;}
+                    else
+                    {wynik = wynik & false;}
+                    cout << " > "<< wynik << endl;
+                }
+
+                settings->value("mniejszeOd").toDouble(&isNumber);
+                if(isNumber)
+                {
+
+                    if(pole->getStrWartosc().toDouble() < settings->value("mniejszeOd").toDouble())
+                    {wynik = wynik & true;}
+                    else
+                    {wynik = wynik & false;}
+                    cout << " < "<< wynik << endl;
+                }
+
+                settings->value("rowne").toDouble(&isNumber);
+                if(isNumber)
+                {
+
+                    if(pole->getStrWartosc().toDouble() == settings->value("rowne").toDouble())
+                    {wynik = wynik & true;}
+                    else
+                    {wynik = wynik & false;}
+                    cout << " == "<< wynik << endl;
+                }
+
+                settings->value("wieRowOd").toDouble();
+                if(isNumber)
+                {
+
+                    if(pole->getStrWartosc().toDouble() >= settings->value("wieRowOd").toDouble())
+                    {wynik = wynik & true;}
+                    else
+                    {wynik = wynik & false;}
+                    cout << " >= "<< wynik << endl;
+                }
+
+                settings->value("mniRowOd").toDouble();
+                if(isNumber)
+                {
+
+                    if(pole->getStrWartosc().toDouble() <= settings->value("mniRowOd").toDouble())
+                    {wynik = wynik & true;}
+                    else
+                    {wynik = wynik & false;}
+                    cout << " <= "<< wynik << endl;
+                }
+
+            }
+
+
+
+        }
+        else
+            wynik = wynik & false;
+
+        settings->endArray();
+
+
+        return wynik;
+    }
+
+
+}
 
