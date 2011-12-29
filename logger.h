@@ -13,6 +13,7 @@ private:
     QFile* loggFile;
     QTextStream* textStream;
     QString fileName;
+    bool log;
 public:
     static Logger* getInstance();
     void logguj(QString);
