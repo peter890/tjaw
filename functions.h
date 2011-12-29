@@ -16,6 +16,7 @@ public:
     void uruchomPrzedParsowaniem();
 
     void zapisDoPliku(QString nazwaPliku);
+    void zapisDoPliku();
     void suma(QString nazwaPolaIn, QString nazwaPolaOut);
     double suma(QString nazwaPolaIn);
     void odchylenie(QString nazwaPolaIn, QString nazwaPolaOut);

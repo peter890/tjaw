@@ -111,6 +111,7 @@ void Functions::uruchomFunkcjeDlaTjaw()
 
     //cout << obj->toString() <<endl;
     //cout << ">end";
+    this->zapisDoPliku();
 
 }
 void Functions::uruchomFunkcjeDlaPliku()
@@ -184,6 +185,21 @@ void Functions::zapisDoPliku(QString nazwaPliku)
     }
 
 }
+void Functions::zapisDoPliku()
+{
+    QSettings settings("config.ini",QSettings::IniFormat);
+    QFile plik(settings.value("Opcje/outputFile").toString());
+    if(plik.open(QFile::Append | QFile::Text))
+    {
+        QTextStream stream(&plik);
+        //--------------------- STRUMIENIOWY ZAPIS DO PLIKU ------------------
+        stream << obj->naglowek.toString();
+
+        for(int i=0; i< obj->wiersze.size(); i++)
+            stream << obj->wiersze[i]->toString() << endl;
+        stream << ">end" << endl;
+    }
+}
 
 void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
 {
@@ -197,7 +213,7 @@ void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
     }
 
     srednia = sumaTmp/n;
-    cout << "srednia: " << srednia;
+    //cout << "srednia: " << srednia;
 
     for(int a=0; a < n; a++)
     {
@@ -207,7 +223,7 @@ void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
     odchylenie = sqrt(wariancja);
     obj->naglowek.wstawPole(nazwaPolaOut,num.number(odchylenie));
 
-    cout << "\t odchylenie: " << odchylenie << "\n";
+    //cout << "\t odchylenie: " << odchylenie << "\n";
     dane.clear();
 
 
