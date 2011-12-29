@@ -13,9 +13,19 @@ TjawParser::TjawParser(QString fileName)
     this->fileName = fileName;
     cout << "fileName: " << fileName.toStdString() <<endl;
 }
+
+TjawParser::TjawParser()
+{
+    QSettings settings("config.ini",QSettings::IniFormat);
+    this->fileName = settings.value("Opcje/inputFile").toString();
+
+}
 void TjawParser::Parsuj(TJAW * tjaw)
 {
     Functions functions(tjaw);
+functions.uruchomPrzedParsowaniem();
+
+
     QFile plik(fileName); //uchwyt do pliku
     QTextStream in(&plik); //tworzy strumien na podstawie uchwytu
     if(plik.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -80,9 +90,9 @@ void TjawParser::Parsuj(TJAW * tjaw)
                             }
                         }
 
-                        Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Uruchomiono funkcje dla trajektorii: " + tjaw->naglowek.toString());
+                        Logger::getInstance()->logguj("Uruchomiono funkcje dla trajektorii: " + tjaw->naglowek.toString());
                         functions.uruchomFunkcjeDlaTjaw();
-                        Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zakonczone funkcje dla trajektorii" + "\n");
+                        Logger::getInstance()->logguj("Zakonczone funkcje dla trajektorii");
 
 
 
@@ -110,7 +120,7 @@ void TjawParser::Parsuj(TJAW * tjaw)
     //cout << "\nSkonczylem parsowac\n";
     functions.uruchomFunkcjeDlaPliku();
     plik.close();
-    Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Zamknieto plik: " + fileName);
+    Logger::getInstance()->logguj( "Zamknieto plik: " + fileName);
 }
 
 

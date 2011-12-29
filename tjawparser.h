@@ -12,6 +12,7 @@ class TjawParser
 {
 public:
     TjawParser(QString fileName);
+    TjawParser();
     void Parsuj(TJAW*);
     //void wykonajObliczeniaTraj(int* functions[]);
 private:

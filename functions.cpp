@@ -5,6 +5,7 @@ Functions::Functions(TJAW *_obj)
 {
     this->obj = _obj;
     this->settings = new QSettings("config.ini",QSettings::IniFormat);
+
 }
 void Functions::Wyswietl(TJAW *_obj)
 {
@@ -33,7 +34,7 @@ void Functions::suma(QString nazwaPolaIn, QString nazwaPolaOut)
     }
 
     obj->naglowek.wstawPole(nazwaPolaOut,num.number(sum));
-    Logger::getInstance()->logguj(QDateTime::currentDateTime().toString("hh:mm:ss") + " - Wykonano 'suma' dla pola '"+ nazwaPolaIn +"'");
+    Logger::getInstance()->logguj("Wykonano 'suma' dla pola '"+ nazwaPolaIn +"'");
 
 
 }
@@ -129,15 +130,44 @@ void Functions::uruchomFunkcjeDlaPliku()
 
             if(settings->value("dane").toInt() == 2)
             {
-              odchylenie(in, out);
+                odchylenie(in, out);
             }
 
 
         }
         settings->endArray();
-        cout << "rozmiar vectora dane " << dane.size()<< endl;
+
     }
+
 }
+
+void Functions::uruchomPrzedParsowaniem()
+{
+    //----------------------------------------------------------------------
+    if(settings->value("Funkcje/polaczPliki").toBool())
+    {
+        QVector<QString> pliki;
+        QString plik, output;
+
+        int size = settings->value("PolaczPliki/size").toInt();
+        output = settings->value("PolaczPliki/wyPlik").toString();
+
+        settings->beginReadArray("PolaczPliki");
+        for(int i = 0; i < size; i++ )
+        {
+            settings->setArrayIndex(i);
+            plik = settings->value("wePlik").toString();
+            pliki.push_back(plik);
+
+        }
+        settings->endArray();
+        polaczPliki(pliki,output);
+        Logger::getInstance()->logguj("Pliki zlaczono do pliku: " + output);
+    }
+
+}
+
+
 void Functions::zapisDoPliku(QString nazwaPliku)
 {
     qDebug("nazwa Pliku: " +nazwaPliku.toAscii());
@@ -181,6 +211,29 @@ void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
     dane.clear();
 
 
+}
+
+void Functions::polaczPliki(const QVector<QString> inputFiles, QString outputFile)
+{
+    QFile file(outputFile);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&file);
+
+    for(int i=0; i<inputFiles.size(); i++)
+    {
+        QFile input(inputFiles[i]);
+
+        if(input.open(QFile::ReadOnly | QFile::Text))
+        {
+            QTextStream in(&input);
+            while(!in.atEnd())
+                out << in.readLine() << endl;
+        }
+        else
+            //qDebug("Nie ma plikow");
+            Logger::getInstance()->logguj("Brak niektorych plikow do zlaczenia");
+    }
+    if(log) Logger::getInstance()->logguj("Wykonano laczenie plikow");
 }
 
 
