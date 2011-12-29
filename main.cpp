@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
     QTime t;
 
     TJAW tjaw;
-    TjawParser parser("test_q2.dtr");
+    //TjawParser parser("test_q2.dtr");
+    TjawParser parser;
 
     t.start();
     parser.Parsuj(&tjaw);
