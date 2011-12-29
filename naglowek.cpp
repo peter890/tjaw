@@ -45,5 +45,27 @@ QString Naglowek::toString()
     }
     return naglowek;
 }
+Pole* Naglowek::getPole(int i)
+{
+    if(i>=0 && i<pola.size())
+    {
+        return pola.at(i);
+    }
+    return NULL;
+}
+
+Pole* Naglowek::getPole(QString name)
+{
+    for(int i=0; i<pola.size(); i++)
+    {
+        if(pola.at(i)->getNazwa() == name)
+        {
+            return pola.at(i);
+        }
+    }
+    return NULL;
+
+
+}
 
 

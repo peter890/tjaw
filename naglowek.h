@@ -14,6 +14,8 @@ public:
     void wstawPole(QString nazwa, QString wartosc);
     void erase();
     QString toString();
+    Pole* getPole(int i);
+    Pole* getPole(QString name);
 };
 
 #endif // NAGLOWEK_H
