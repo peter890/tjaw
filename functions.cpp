@@ -256,6 +256,7 @@ void Functions::polaczPliki(const QVector<QString> inputFiles, QString outputFil
 bool Functions::filtruj()
 {
     int size = settings->value("Filtr/size").toInt();
+
     QString nazwaPola;
     bool isNumber;
     bool isDate;
@@ -267,13 +268,13 @@ bool Functions::filtruj()
     settings->beginReadArray("Filtr");
     for(int i = 0; i < size; i++ )
     {
+
         settings->setArrayIndex(i);
         nazwaPola = settings->value("nazwaPola").toString();
         pole = obj->naglowek.getPole(nazwaPola);
         if(pole != NULL)
         {
             pole->getStrWartosc().toDouble(&isNumber);
-            cout << "if(isNumber) "<< isNumber << endl;
             if(isNumber)
             {
                 settings->value("wiekszeOd").toDouble(&isNumber);
@@ -284,7 +285,6 @@ bool Functions::filtruj()
                     {wynik = wynik & true;}
                     else
                     {wynik = wynik & false;}
-                    cout << " > "<< wynik << endl;
                 }
 
                 settings->value("mniejszeOd").toDouble(&isNumber);
@@ -295,7 +295,6 @@ bool Functions::filtruj()
                     {wynik = wynik & true;}
                     else
                     {wynik = wynik & false;}
-                    cout << " < "<< wynik << endl;
                 }
 
                 settings->value("rowne").toDouble(&isNumber);
@@ -306,7 +305,6 @@ bool Functions::filtruj()
                     {wynik = wynik & true;}
                     else
                     {wynik = wynik & false;}
-                    cout << " == "<< wynik << endl;
                 }
 
                 settings->value("wieRowOd").toDouble();
@@ -317,7 +315,6 @@ bool Functions::filtruj()
                     {wynik = wynik & true;}
                     else
                     {wynik = wynik & false;}
-                    cout << " >= "<< wynik << endl;
                 }
 
                 settings->value("mniRowOd").toDouble();
@@ -328,23 +325,15 @@ bool Functions::filtruj()
                     {wynik = wynik & true;}
                     else
                     {wynik = wynik & false;}
-                    cout << " <= "<< wynik << endl;
                 }
 
             }
-
-
-
         }
         else
             wynik = wynik & false;
-
-        settings->endArray();
-
-
-        return wynik;
     }
-
+    settings->endArray();
+    return wynik;
 
 }
 
