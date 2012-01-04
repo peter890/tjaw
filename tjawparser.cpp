@@ -109,8 +109,6 @@ functions.uruchomPrzedParsowaniem();
                     }
                     else
                         linie.push_back(wiersz);
-
-
                 }
             }
             // else
@@ -122,5 +120,4 @@ functions.uruchomPrzedParsowaniem();
     plik.close();
     Logger::getInstance()->logguj( "Zamknieto plik: " + fileName);
 }
-
 
