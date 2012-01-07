@@ -173,7 +173,7 @@ void Functions::zapisDoPliku(QString nazwaPliku)
 {
     qDebug("nazwa Pliku: " +nazwaPliku.toAscii());
     QFile plik(nazwaPliku);
-    if(plik.open(QFile::WriteOnly | QFile::Text))
+    if(plik.open(QFile::Append | QFile::Text))
     {
         QTextStream stream(&plik);
         //--------------------- STRUMIENIOWY ZAPIS DO PLIKU ------------------
@@ -189,7 +189,7 @@ void Functions::zapisDoPliku()
 {
     QSettings settings("config.ini",QSettings::IniFormat);
     QFile plik(settings.value("Opcje/outputFile").toString());
-    if(plik.open(QFile::WriteOnly | QFile::Text))
+    if(plik.open(QFile::Append | QFile::Text))
     {
         QTextStream stream(&plik);
         //--------------------- STRUMIENIOWY ZAPIS DO PLIKU ------------------
@@ -291,13 +291,13 @@ bool Functions::filtruj()
             else
                 isTime = false;
             //------------------------------------------------------------------------
-
+            cout << "isNumber: " << isNumber << " isDate: "<< isDate << " isTime: " <<isTime;
 
 
 
 
             if(isNumber)  //==============================================================================================================
-            { cout << "isNumber";
+            { //cout << "isNumber";
                 settings->value("wiekszeOd").toDouble(&isNumber);
 
                 if(isNumber){
@@ -428,86 +428,142 @@ bool Functions::filtruj()
                     else
                     {wynik = wynik & false;}
                 }
+            }
                 if(isTime)
                     //===============================================================================================================================
                 {
                     QTime timeTmp;
-                    //time = QTime::fromString(pole->getStrWartosc().trimmed(),"hh:mm:ss");
-
+                    time = QTime::fromString(pole->getStrWartosc().trimmed(),"hh:mm:ss");
+cout << time.toString().toStdString()<<endl;
 
                     //if(!time.isNull() && time.isValid())
                     //{
                     timeTmp = QTime::fromString(settings->value("wiekszeOd").toString(),"hh:mm:ss");
-                    cout << "timeTmp: " << timeTmp.toString().toStdString() << endl;
+
 
                     if(!timeTmp.isNull() && timeTmp.isValid())
 
-                    {
+                    {cout <<"wiekszeOd\n";
 
                         if(time > timeTmp)
-                        {wynik = wynik & true; cout <<"wiekszeOd\n";}
+                        {wynik = wynik & true; }
                         else
                         {wynik = wynik & false;}
                     }
 
                     timeTmp = QTime::fromString(settings->value("mniejszeOd").toString(),"hh:mm:ss");
-                    cout << "timeTmp: " << timeTmp.toString().toStdString() << endl;
+
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {
+                    {cout <<"mniejszeOd\n";
 
                         if(time < timeTmp)
-                        {wynik = wynik & true; cout <<"mniejszeOd\n";}
+                        {wynik = wynik & true; }
                         else
                         {wynik = wynik & false;}
                     }
 
                     timeTmp = QTime::fromString(settings->value("rowne").toString(),"hh:mm:ss");
-                    cout << "timeTmp: " << timeTmp.toString().toStdString() << endl;
+
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {
+                    {cout <<"rowne\n";
 
                         if(time == timeTmp)
-                        {wynik = wynik & true;cout <<"rowne\n";}
+                        {wynik = wynik & true;}
                         else
                         {wynik = wynik & false;}
                     }
 
                     timeTmp = QTime::fromString(settings->value("rozne").toString(),"hh:mm:ss");
-                    cout << "timeTmp: " << timeTmp.toString().toStdString() << endl;
+
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {
+                    {cout <<"rozne\n";
 
                         if(time != timeTmp)
-                        {wynik = wynik & true;cout <<"rozne\n";}
+                        {wynik = wynik & true;}
                         else
                         {wynik = wynik & false;}
                     }
 
                     timeTmp = QTime::fromString(settings->value("wieRowOd").toString(),"hh:mm:ss");
-                    cout << "timeTmp: " << timeTmp.toString().toStdString() << endl;
+
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {
+                    {cout <<"wieRowOd\n";
 
                         if(time >= timeTmp)
-                        {wynik = wynik & true;cout <<"wieRowOd\n";}
+                        {wynik = wynik & true;}
                         else
                         {wynik = wynik & false;}
                     }
 
                     timeTmp = QTime::fromString(settings->value("mniRowOd").toString(),"hh:mm:ss");
-                    cout << "timeTmp: " << timeTmp.toString().toStdString() << endl;
+
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {
+                    {cout <<"mniRowOd\n";
 
                         if(time <= timeTmp)
-                        {wynik = wynik & true;cout <<"mniRowOd\n";}
+                        {wynik = wynik & true;}
                         else
                         {wynik = wynik & false;}
                     }
                     //}
                 }
+                else //String
+                { cout <<"isString\n";
+                    QString string, stringTmp;
+                    string = pole->getStrWartosc().trimmed();
 
-            }
+                    stringTmp = settings->value("wiekszeOd").toString();
+                    if(!stringTmp.isEmpty())
+                    {
+                        if(string > stringTmp)
+                        {wynik = wynik & true;}
+                        else
+                        {wynik = wynik & false;}
+                    }
+                    stringTmp = settings->value("mniejszeOd").toString();
+                    if(!stringTmp.isEmpty())
+                    {
+                        if(string < stringTmp)
+                        {wynik = wynik & true;}
+                        else
+                        {wynik = wynik & false;}
+                    }
+                    stringTmp = settings->value("rowne").toString();
+                    if(!stringTmp.isEmpty())
+                    {
+                        if(string == stringTmp)
+                        {wynik = wynik & true;}
+                        else
+                        {wynik = wynik & false;}
+                    }
+                    stringTmp = settings->value("rozne").toString();
+                    if(!stringTmp.isEmpty())
+                    {
+                        if(string > stringTmp)
+                        {wynik = wynik & true;}
+                        else
+                        {wynik = wynik & false;}
+                    }
+                    stringTmp = settings->value("wieRowOd").toString();
+                    if(!stringTmp.isEmpty())
+                    {
+                        if(string >= stringTmp)
+                        {wynik = wynik & true;}
+                        else
+                        {wynik = wynik & false;}
+                    }
+                    stringTmp = settings->value("mniRowOd").toString();
+                    if(!stringTmp.isEmpty())
+                    {
+                        if(string <= stringTmp)
+                        {wynik = wynik & true;}
+                        else
+                        {wynik = wynik & false;}
+                    }
+
+                }
+
+
         }
         else
             wynik = wynik & false;

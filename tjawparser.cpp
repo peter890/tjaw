@@ -23,7 +23,14 @@ TjawParser::TjawParser()
 void TjawParser::Parsuj(TJAW * tjaw)
 {
     Functions functions(tjaw);
-functions.uruchomPrzedParsowaniem();
+    functions.uruchomPrzedParsowaniem();
+
+    QSettings settings("config.ini",QSettings::IniFormat);
+    QFile output(settings.value("Opcje/outputFile").toString());
+    if(output.exists())
+    {
+        output.remove();
+    }
 
 
     QFile plik(fileName); //uchwyt do pliku
