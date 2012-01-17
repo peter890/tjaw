@@ -4,78 +4,85 @@
 Wiersz::Wiersz()
 {
 }
+
+
 Wiersz::Wiersz(Pole * pole)
 {
-    pola.push_back(pole);
+    pola_.push_back(pole);
 }
-void Wiersz::erase()
-{
 
+
+void Wiersz::wyczysc()
+{
     QVector<Pole*>::iterator it;
-    for(it=pola.begin(); it!=pola.end();)
+
+    for(it=pola_.begin(); it!=pola_.end();)
     {
         delete (*it);
-        it = pola.erase(it);
+        it = pola_.erase(it);
     }
 
 }
 
+
 QString Wiersz::toString()
 {
-  QString wiersz;
-  for(int i=0; i<pola.size(); i++)
-  {
-      if(!pola.at(i)->getNazwa().isEmpty() && !pola.at(i)->getStrWartosc().isEmpty() )
-          wiersz.append(pola.at(i)->getNazwa() + "=" + pola.at(i)->getStrWartosc() + " ");
-      else
-      if(pola.at(i)->getStrWartosc().isEmpty())
-          wiersz.append(pola.at(i)->getNazwa() + " ");
-  }
-  return wiersz;
+    QString wiersz;
+
+    for(int i=0; i<pola_.size(); i++)
+    {
+        if(!pola_.at(i)->getNazwa().isEmpty() && !pola_.at(i)->getStrWartosc().isEmpty() )
+        {
+            wiersz.append(pola_.at(i)->getNazwa() + "=" + pola_.at(i)->getStrWartosc() + " ");
+        }
+        else
+        {
+            if(pola_.at(i)->getStrWartosc().isEmpty())
+            {
+                wiersz.append(pola_.at(i)->getNazwa() + " ");
+            }
+        }
+    }
+    return wiersz;
 }
+
 
 void Wiersz::wstawPole(QString nazwa, QString wartosc)
 {
     bool isNumber = false;
-
     double number = 0;
     number = wartosc.toDouble(&isNumber); //funkcja toDouble zwraca przez parametr informacje(bool) o tym czy udalo sie przekonwertowac QStringa na Double
+
     if(isNumber)
     {
-        this->pola.append(new PoleNum(nazwa,number));
-        //cout << wartosc.toStdString() << " jest liczba: "<< isNumber << endl;
+        this->pola_.append(new PoleNum(nazwa,number));
     }
     else
     {
-       this->pola.append(new PoleTxt(nazwa,wartosc));
+        this->pola_.append(new PoleTxt(nazwa,wartosc));
     }
 }
 
-Pole* Wiersz::getPole(int i)
+
+Pole* Wiersz::getPole(int index)
 {
-    if(i>=0 && i<pola.size())
+    if(index>=0 && index<pola_.size())
     {
-        return pola.at(i);
+        return pola_.at(index);
     }
     return NULL;
 }
 
-Pole* Wiersz::getPole(QString name)
+
+Pole* Wiersz::getPole(QString nazwa)
 {
-    for(int i=0; i<pola.size(); i++)
+    for(int i=0; i<pola_.size(); i++)
     {
-        if(pola.at(i)->getNazwa() == name)
+        if(pola_.at(i)->getNazwa() == nazwa)
         {
-            return pola.at(i);
+            return pola_.at(i);
         }
     }
     return NULL;
-
-
 }
-
-
-
-
-
 

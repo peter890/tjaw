@@ -3,18 +3,24 @@
 
 PoleTxt::PoleTxt(QString nazwa, QString wartosc):Pole(nazwa)
 {
-    this->_wartosc = wartosc;
+    this->wartosc_ = wartosc;
 }
+
+
 void PoleTxt::setWartosc(QString wartosc)
 {
-    this->_wartosc = wartosc;
+    this->wartosc_ = wartosc;
 }
+
+
 QString PoleTxt::getWartosc()
 {
-    return _wartosc;
+    return wartosc_;
 }
+
+
 QString PoleTxt::getStrWartosc()
 {
-    return this->_wartosc;
+    return this->wartosc_;
 
 }

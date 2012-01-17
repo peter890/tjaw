@@ -3,19 +3,24 @@
 
 PoleNum::PoleNum(QString nazwa, double wartosc):Pole(nazwa)
 {
-    this->_wartosc = wartosc;
+    this->wartosc_ = wartosc;
 }
+
+
 void PoleNum::setWartosc(double wartosc)
 {
-    this->_wartosc = wartosc;
+    this->wartosc_ = wartosc;
 }
+
+
 double PoleNum::getWartosc()
 {
-    return _wartosc;
+    return wartosc_;
 }
+
+
 QString PoleNum::getStrWartosc()
 {
     QString tmp;
-    return tmp.setNum(this->_wartosc);
-
+    return tmp.setNum(this->wartosc_);
 }

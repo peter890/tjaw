@@ -1,171 +1,168 @@
 #include "functions.h"
 #include <math.h>
 
+
 Functions::Functions(TJAW *_obj)
 {
-    this->obj = _obj;
-    this->settings = new QSettings("config.ini",QSettings::IniFormat);
+    this->obj_ = _obj;
+    this->ustawienia_ = new QSettings("config.ini",QSettings::IniFormat);
 
 }
+
+
 void Functions::Wyswietl(TJAW *_obj)
 {
-    cout << _obj->naglowek.toString().toStdString();
+    cout << _obj->naglowek_.toString().toStdString();
 
-    for(int i=0; i< _obj->wiersze.size(); i++)
-        cout << _obj->wiersze[i]->toString().toStdString() << endl;
+    for(int i=0; i< _obj->wiersze_.size(); i++)
+    {
+        cout << _obj->wiersze_[i]->toString().toStdString() << endl;
+    }
     cout << ">end\n";
 }
 
-void Functions::suma(QString nazwaPolaIn, QString nazwaPolaOut)
+
+void Functions::suma(QString poleWejsciowe, QString poleWyjsciowe)
 {
     double sum=0;
     QString num;
     Wiersz* wiersz;
 
-    for(int w=0; w < obj->wiersze.size(); w++)
+    for(int w=0; w < obj_->wiersze_.size(); w++)
     {
-        wiersz = obj->wiersze.at(w);
-        if(wiersz->getPole(nazwaPolaIn) != NULL)
+        wiersz = obj_->wiersze_.at(w);
+        if(wiersz->getPole(poleWejsciowe) != NULL)
         {
-            sum += wiersz->getPole(nazwaPolaIn)->getStrWartosc().toDouble();
-
+            sum += wiersz->getPole(poleWejsciowe)->getStrWartosc().toDouble();
         }
     }
 
-    obj->naglowek.wstawPole(nazwaPolaOut,num.number(sum));
-    Logger::getInstance()->logguj("Wykonano 'suma' dla pola '"+ nazwaPolaIn +"'");
-
-
+    obj_->naglowek_.wstawPole(poleWyjsciowe,num.number(sum));
+    Logger::getInstance()->logguj("Wykonano 'suma' dla pola '"+ poleWejsciowe +"'");
 }
-double Functions::suma(QString nazwaPolaIn)
+
+
+double Functions::suma(QString poleWejsciowe)
 {
     double sum=0;
-
     Wiersz* wiersz;
 
-    for(int w=0; w < obj->wiersze.size(); w++)
+    for(int w=0; w < obj_->wiersze_.size(); w++)
     {
-        wiersz = obj->wiersze.at(w);
-        if(wiersz->getPole(nazwaPolaIn) != NULL)
+        wiersz = obj_->wiersze_.at(w);
+        if(wiersz->getPole(poleWejsciowe) != NULL)
         {
-            sum += wiersz->getPole(nazwaPolaIn)->getStrWartosc().toDouble();
-
+            sum += wiersz->getPole(poleWejsciowe)->getStrWartosc().toDouble();
         }
-
     }
     return sum;
-
 }
+
+
 void Functions::uruchomFunkcjeDlaTjaw()
 {
-
-
     QString in, out;
+
     //----------------------------------------------------------------------
-    if(settings->value("Funkcje/suma").toBool())
+    if(ustawienia_->value("Funkcje/suma").toBool())
     {
-        int size = settings->value("Suma/size").toInt();
-        settings->beginReadArray("Suma");
+        int size = ustawienia_->value("Suma/liczbaKolumn").toInt();
+        ustawienia_->beginReadArray("Suma");
+
         for(int i = 0; i < size; i++ )
         {
-            settings->setArrayIndex(i);
-            in = settings->value("kolumnaIn").toString();
-            out = settings->value("kolumnaOut").toString();
+            ustawienia_->setArrayIndex(i);
+            in = ustawienia_->value("kolumnaWejsciowa").toString();
+            out = ustawienia_->value("kolumnaWyjsciowa").toString();
             //cout << "suma IN: " << in.toStdString() << " || OUT: " << out.toStdString()<< endl;
             this->suma(in,out);
-
         }
-        settings->endArray();
-
+        ustawienia_->endArray();
     }
     //----------------------------------------------------------------------
-    if(settings->value("Funkcje/odchylenieStd").toBool()) //2- dla pliku
+    if(ustawienia_->value("Funkcje/odchylenieStd").toBool())
     {
         Wiersz* wiersz;
-        int size = settings->value("Odchylenie/size").toInt();
-        settings->beginReadArray("Odchylenie");
+        int size = ustawienia_->value("Odchylenie/liczbaKolumn").toInt();
+        ustawienia_->beginReadArray("Odchylenie");
+
         for(int i = 0; i < size; i++ )
         {
-            settings->setArrayIndex(i);
-            in = settings->value("kolumnaIn").toString();
-            out = settings->value("kolumnaOut").toString();
-            if(settings->value("dane").toInt() == 2)
+            ustawienia_->setArrayIndex(i);
+            in = ustawienia_->value("kolumnaWejsciowa").toString();
+            out = ustawienia_->value("kolumnaWyjsciowa").toString();
+            /*          ;brak implementacji!!     //2- dla pliku
+            if(ustawienia->value("zrodlo").toInt() == 2)
             {
                 dane.push_back( (double) this->suma(in));
             }
-            if(settings->value("dane").toInt() == 1)
+            if(ustawienia->value("zrodlo").toInt() == 1)
+            {*/
+            for(int w=0; w < obj_->wiersze_.size(); w++)
             {
-                for(int w=0; w < obj->wiersze.size(); w++)
+                wiersz = obj_->wiersze_.at(w);
+                if(wiersz->getPole(in) != NULL)
                 {
-                    wiersz = obj->wiersze.at(w);
-                    if(wiersz->getPole(in) != NULL)
-                    {
-                        dane.push_back(wiersz->getPole(in)->getStrWartosc().toDouble());
-                    }
+                    dane_.push_back(wiersz->getPole(in)->getStrWartosc().toDouble());
                 }
-                odchylenie(in,out);
             }
+            odchylenie(in,out);
+            //}
         }
-        settings->endArray();
+        ustawienia_->endArray();
     }
 
-    //cout << obj->toString() <<endl;
-    //cout << ">end";
     if(filtruj())this->zapisDoPliku();
-
 }
+
+
 void Functions::uruchomFunkcjeDlaPliku()
 {
     QString in, out;
 
-    if(settings->value("Funkcje/odchylenieStd").toBool())
+    if(ustawienia_->value("Funkcje/odchylenieStd").toBool())
     {
-        int size = settings->value("Odchylenie/size").toInt();
-        settings->beginReadArray("Odchylenie");
+        int size = ustawienia_->value("Odchylenie/liczbaKolumn").toInt();
+        ustawienia_->beginReadArray("Odchylenie");
         for(int i = 0; i < size; i++ )
         {
-            settings->setArrayIndex(i);
+            ustawienia_->setArrayIndex(i);
 
-            in = settings->value("kolumnaIn").toString();
-            out = settings->value("kolumnaOut").toString();
+            in = ustawienia_->value("kolumnaWejsciowa").toString();
+            out = ustawienia_->value("kolumnaWyjsciowa").toString();
 
-            if(settings->value("dane").toInt() == 2)
+            if(ustawienia_->value("dane").toInt() == 2)
             {
                 odchylenie(in, out);
             }
-
-
         }
-        settings->endArray();
-
+        ustawienia_->endArray();
     }
-
 }
+
 
 void Functions::uruchomPrzedParsowaniem()
 {
     //----------------------------------------------------------------------
-    if(settings->value("Funkcje/polaczPliki").toBool())
+    if(ustawienia_->value("Funkcje/polaczPliki").toBool())
     {
         QVector<QString> pliki;
         QString plik, output;
 
-        int size = settings->value("PolaczPliki/size").toInt();
-        output = settings->value("PolaczPliki/wyPlik").toString();
+        int size = ustawienia_->value("PolaczPliki/liczbaPlikow").toInt();
+        output = ustawienia_->value("PolaczPliki/plikWyjsciowy").toString();
 
-        settings->beginReadArray("PolaczPliki");
+        ustawienia_->beginReadArray("PolaczPliki");
         for(int i = 0; i < size; i++ )
         {
-            settings->setArrayIndex(i);
-            plik = settings->value("wePlik").toString();
+            ustawienia_->setArrayIndex(i);
+            plik = ustawienia_->value("plikWejsciowy").toString();
             pliki.push_back(plik);
-
         }
-        settings->endArray();
+        ustawienia_->endArray();
         polaczPliki(pliki,output);
         Logger::getInstance()->logguj("Pliki zlaczono do pliku: " + output);
     }
-
 }
 
 
@@ -177,399 +174,484 @@ void Functions::zapisDoPliku(QString nazwaPliku)
     {
         QTextStream stream(&plik);
         //--------------------- STRUMIENIOWY ZAPIS DO PLIKU ------------------
-        stream << obj->naglowek.toString();
+        stream << obj_->naglowek_.toString();
 
-        for(int i=0; i< obj->wiersze.size(); i++)
-            stream << obj->wiersze[i]->toString() << endl;
+        for(int i=0; i< obj_->wiersze_.size(); i++)
+        {
+            stream << obj_->wiersze_[i]->toString() << endl;
+        }
         stream << ">end";
     }
-
 }
+
+
 void Functions::zapisDoPliku()
 {
-    QSettings settings("config.ini",QSettings::IniFormat);
-    QFile plik(settings.value("Opcje/outputFile").toString());
+    QSettings ustawienia("config.ini",QSettings::IniFormat);
+    QFile plik(ustawienia.value("Opcje/plikWynikowy").toString());
     if(plik.open(QFile::Append | QFile::Text))
     {
         QTextStream stream(&plik);
         //--------------------- STRUMIENIOWY ZAPIS DO PLIKU ------------------
-        stream << obj->naglowek.toString();
+        stream << obj_->naglowek_.toString();
 
-        for(int i=0; i< obj->wiersze.size(); i++)
-            stream << obj->wiersze[i]->toString() << endl;
+        for(int i=0; i< obj_->wiersze_.size(); i++)
+        {
+            stream << obj_->wiersze_[i]->toString() << endl;
+        }
         stream << ">end" << endl;
     }
 }
 
-void Functions::odchylenie(QString nazwaPolaIn, QString nazwaPolaOut)
+
+void Functions::odchylenie(QString poleWejsciowe, QString poleWyjsciowe)
 {
-    double sumaTmp, srednia, wariancja, odchylenie;
+    double sumaTmp=0, srednia, wariancja=0, odchylenie;
     QString num;
-    int n = dane.size();
+    int n = dane_.size();
+
+    Logger::getInstance()->logguj("odchylenie");
 
     for(int i=0; i < n; i++)
     {
-        sumaTmp+=dane[i];
+        sumaTmp+=dane_[i];
     }
 
     srednia = sumaTmp/n;
-    //cout << "srednia: " << srednia;
 
     for(int a=0; a < n; a++)
     {
-        wariancja += pow(dane[a] - srednia,2);  //liczymy licznik
+        wariancja += pow(dane_[a] - srednia,2);  //liczymy licznik
     }
+
     wariancja = wariancja / n; //licznik przez mianownik
     odchylenie = sqrt(wariancja);
-    obj->naglowek.wstawPole(nazwaPolaOut,num.number(odchylenie));
+    obj_->naglowek_.wstawPole(poleWyjsciowe,num.number(odchylenie));
 
-    //cout << "\t odchylenie: " << odchylenie << "\n";
-    dane.clear();
-
-
+    dane_.clear();
 }
 
-void Functions::polaczPliki(const QVector<QString> inputFiles, QString outputFile)
+
+void Functions::polaczPliki(const QVector<QString> plikiWejsciowe, QString plikWyjsciowy)
 {
-    QFile file(outputFile);
+    QFile file(plikWyjsciowy);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&file);
 
-    for(int i=0; i<inputFiles.size(); i++)
+    for(int i=0; i<plikiWejsciowe.size(); i++)
     {
-        QFile input(inputFiles[i]);
+        QFile input(plikiWejsciowe[i]);
 
         if(input.open(QFile::ReadOnly | QFile::Text))
         {
             QTextStream in(&input);
             while(!in.atEnd())
+            {
                 out << in.readLine() << endl;
+            }
         }
         else
-            //qDebug("Nie ma plikow");
             Logger::getInstance()->logguj("Brak niektorych plikow do zlaczenia");
     }
-    if(log) Logger::getInstance()->logguj("Wykonano laczenie plikow");
+    Logger::getInstance()->logguj("Wykonano laczenie plikow");
 }
+
 
 bool Functions::filtruj()
 {
-    int size = settings->value("Filtr/size").toInt();
-
-    QString nazwaPola;
-    bool isNumber;
-    bool isDate;
-    bool isText;
-    bool isTime;
-
-    bool wynik = true;
-
-    Pole* pole;
-    settings->beginReadArray("Filtr");
-    for(int i = 0; i < size; i++ )
+    if(ustawienia_->value("Funkcje/filtrowanie").toBool())
     {
+        int size = ustawienia_->value("Filtr/liczbaKolumn").toInt();
 
-        settings->setArrayIndex(i);
-        nazwaPola = settings->value("nazwaPola").toString();
-        pole = obj->naglowek.getPole(nazwaPola);
-        if(pole != NULL)
+        QString nazwaPola;
+        Pole* pole;
+        bool isNumber;
+        bool isDate;
+        bool isTime;
+        bool wynik = true;
+
+        ustawienia_->beginReadArray("Filtr");
+
+        for(int i = 0; i < size; i++ )
         {
-            pole->getStrWartosc().toDouble(&isNumber);
+            ustawienia_->setArrayIndex(i);
+            nazwaPola = ustawienia_->value("nazwaPola").toString();
+            pole = obj_->naglowek_.getPole(nazwaPola);
 
-            //==============----------------------------=============================
-            QDate data = QDate::fromString(pole->getStrWartosc().trimmed(),"yyyy/MM/dd");
+            if(pole != NULL)
+            {
+                pole->getStrWartosc().toDouble(&isNumber);
 
-            if(!data.isNull() && data.isValid())
-                isDate = true;
-            else
-                isDate = false;
-            //-------------------------------------------------------------------------
-            QTime time = QTime::fromString(pole->getStrWartosc().trimmed(),"hh:mm:ss");
+                //==============================================================================================================
+                QDate data = QDate::fromString(pole->getStrWartosc().trimmed(),"yyyy/MM/dd");
 
-            if(!time.isNull() && time.isValid())
-                isTime = true;
-            else
-                isTime = false;
-            //------------------------------------------------------------------------
-            cout << "isNumber: " << isNumber << " isDate: "<< isDate << " isTime: " <<isTime;
-
-
-
-
-            if(isNumber)  //==============================================================================================================
-            { //cout << "isNumber";
-                settings->value("wiekszeOd").toDouble(&isNumber);
-
-                if(isNumber){
-
-                    if(pole->getStrWartosc().toDouble() > settings->value("wiekszeOd").toDouble())
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
+                if(!data.isNull() && data.isValid())
+                {
+                    isDate = true;
                 }
+                else
+                {
+                    isDate = false;
+                }
+                //-------------------------------------------------------------------------
+                QTime time = QTime::fromString(pole->getStrWartosc().trimmed(),"hh:mm:ss");
 
-                settings->value("mniejszeOd").toDouble(&isNumber);
+                if(!time.isNull() && time.isValid())
+                {
+                    isTime = true;
+                }
+                else
+                {
+                    isTime = false;
+                }
+                //==============================================================================================================
+
                 if(isNumber)
                 {
+                    ustawienia_->value("wiekszeOd").toDouble(&isNumber);
 
-                    if(pole->getStrWartosc().toDouble() < settings->value("mniejszeOd").toDouble())
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
+                    if(isNumber)
+                    {
+                        if(pole->getStrWartosc().toDouble() > ustawienia_->value("wiekszeOd").toDouble())
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    ustawienia_->value("mniejszeOd").toDouble(&isNumber);
+                    if(isNumber)
+                    {
+                        if(pole->getStrWartosc().toDouble() < ustawienia_->value("mniejszeOd").toDouble())
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    ustawienia_->value("rowne").toDouble(&isNumber);
+                    if(isNumber)
+                    {
+
+                        if(pole->getStrWartosc().toDouble() == ustawienia_->value("rowne").toDouble())
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    ustawienia_->value("rozne").toDouble(&isNumber);
+                    if(isNumber)
+                    {
+                        if(pole->getStrWartosc().toDouble() != ustawienia_->value("rozne").toDouble())
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    ustawienia_->value("wieRowOd").toDouble();
+                    if(isNumber)
+                    {
+                        if(pole->getStrWartosc().toDouble() >= ustawienia_->value("wieRowOd").toDouble())
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    ustawienia_->value("mniRowOd").toDouble();
+                    if(isNumber)
+                    {
+                        if(pole->getStrWartosc().toDouble() <= ustawienia_->value("mniRowOd").toDouble())
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
                 }
+                //==============================================================================================================
 
-                settings->value("rowne").toDouble(&isNumber);
-                if(isNumber)
+                if(isDate)
                 {
+                    QDate dataTmp;
+                    data = QDate::fromString(pole->getStrWartosc().trimmed(),"yyyy/MM/dd");
 
-                    if(pole->getStrWartosc().toDouble() == settings->value("rowne").toDouble())
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
+                    dataTmp = QDate::fromString(ustawienia_->value("wiekszeOd").toString(),"yyyy/MM/dd");
+                    if(!dataTmp.isNull() && dataTmp.isValid())
+                    {
+                        if(data > dataTmp)
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    dataTmp = QDate::fromString(ustawienia_->value("mniejszeOd").toString(),"yyyy/MM/dd");
+                    if(!dataTmp.isNull() && dataTmp.isValid())
+                    {
+                        if(data < dataTmp)
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    dataTmp = QDate::fromString(ustawienia_->value("rowne").toString(),"yyyy/MM/dd");
+                    if(!dataTmp.isNull() && dataTmp.isValid())
+                    {
+                        if(data == dataTmp)
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    dataTmp = QDate::fromString(ustawienia_->value("rozne").toString(),"yyyy/MM/dd");
+                    if(!dataTmp.isNull() && dataTmp.isValid())
+                    {
+                        if(data != dataTmp)
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    dataTmp = QDate::fromString(ustawienia_->value("wieRowOd").toString(),"yyyy/MM/dd");
+                    if(!dataTmp.isNull() && dataTmp.isValid())
+                    {
+                        if(data >= dataTmp)
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
+
+                    dataTmp = QDate::fromString(ustawienia_->value("mniRowOd").toString(),"yyyy/MM/dd");
+                    if(!dataTmp.isNull() && dataTmp.isValid())
+                    {
+                        if(data <= dataTmp)
+                        {
+                            wynik = wynik & true;
+                        }
+                        else
+                        {
+                            wynik = wynik & false;
+                        }
+                    }
                 }
+                //==============================================================================================================
 
-                settings->value("rozne").toDouble(&isNumber);
-                if(isNumber)
-                {
-
-                    if(pole->getStrWartosc().toDouble() != settings->value("rozne").toDouble())
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-                settings->value("wieRowOd").toDouble();
-                if(isNumber)
-                {
-
-                    if(pole->getStrWartosc().toDouble() >= settings->value("wieRowOd").toDouble())
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-                settings->value("mniRowOd").toDouble();
-                if(isNumber)
-                {
-
-                    if(pole->getStrWartosc().toDouble() <= settings->value("mniRowOd").toDouble())
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-            }
-            if(isDate)
-            { //===============================================================================================================================
-
-                QDate dataTmp;
-                data = QDate::fromString(pole->getStrWartosc().trimmed(),"yyyy/MM/dd");
-
-                //if(!data.isNull() && data.isValid())
-                //{
-                dataTmp = QDate::fromString(settings->value("wiekszeOd").toString(),"yyyy/MM/dd");
-
-                if(!dataTmp.isNull() && dataTmp.isValid())
-
-                {
-
-                    if(data > dataTmp)
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-                dataTmp = QDate::fromString(settings->value("mniejszeOd").toString(),"yyyy/MM/dd");
-                if(!dataTmp.isNull() && dataTmp.isValid())
-                {
-
-                    if(data < dataTmp)
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-                dataTmp = QDate::fromString(settings->value("rowne").toString(),"yyyy/MM/dd");
-                if(!dataTmp.isNull() && dataTmp.isValid())
-                {
-
-                    if(data == dataTmp)
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-                dataTmp = QDate::fromString(settings->value("rozne").toString(),"yyyy/MM/dd");
-                if(!dataTmp.isNull() && dataTmp.isValid())
-                {
-
-                    if(data != dataTmp)
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-                dataTmp = QDate::fromString(settings->value("wieRowOd").toString(),"yyyy/MM/dd");
-                if(!dataTmp.isNull() && dataTmp.isValid())
-                {
-
-                    if(data >= dataTmp)
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-
-                dataTmp = QDate::fromString(settings->value("mniRowOd").toString(),"yyyy/MM/dd");
-                if(!dataTmp.isNull() && dataTmp.isValid())
-                {
-
-                    if(data <= dataTmp)
-                    {wynik = wynik & true;}
-                    else
-                    {wynik = wynik & false;}
-                }
-            }
                 if(isTime)
-                    //===============================================================================================================================
                 {
                     QTime timeTmp;
                     time = QTime::fromString(pole->getStrWartosc().trimmed(),"hh:mm:ss");
-cout << time.toString().toStdString()<<endl;
 
-                    //if(!time.isNull() && time.isValid())
-                    //{
-                    timeTmp = QTime::fromString(settings->value("wiekszeOd").toString(),"hh:mm:ss");
-
-
+                    timeTmp = QTime::fromString(ustawienia_->value("wiekszeOd").toString(),"hh:mm:ss");
                     if(!timeTmp.isNull() && timeTmp.isValid())
-
-                    {cout <<"wiekszeOd\n";
+                    {
 
                         if(time > timeTmp)
-                        {wynik = wynik & true; }
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
 
-                    timeTmp = QTime::fromString(settings->value("mniejszeOd").toString(),"hh:mm:ss");
-
+                    timeTmp = QTime::fromString(ustawienia_->value("mniejszeOd").toString(),"hh:mm:ss");
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {cout <<"mniejszeOd\n";
-
+                    {
                         if(time < timeTmp)
-                        {wynik = wynik & true; }
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
 
-                    timeTmp = QTime::fromString(settings->value("rowne").toString(),"hh:mm:ss");
-
+                    timeTmp = QTime::fromString(ustawienia_->value("rowne").toString(),"hh:mm:ss");
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {cout <<"rowne\n";
-
+                    {
                         if(time == timeTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
 
-                    timeTmp = QTime::fromString(settings->value("rozne").toString(),"hh:mm:ss");
-
+                    timeTmp = QTime::fromString(ustawienia_->value("rozne").toString(),"hh:mm:ss");
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {cout <<"rozne\n";
-
+                    {
                         if(time != timeTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
 
-                    timeTmp = QTime::fromString(settings->value("wieRowOd").toString(),"hh:mm:ss");
-
+                    timeTmp = QTime::fromString(ustawienia_->value("wieRowOd").toString(),"hh:mm:ss");
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {cout <<"wieRowOd\n";
+                    {
 
                         if(time >= timeTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
 
-                    timeTmp = QTime::fromString(settings->value("mniRowOd").toString(),"hh:mm:ss");
-
+                    timeTmp = QTime::fromString(ustawienia_->value("mniRowOd").toString(),"hh:mm:ss");
                     if(!timeTmp.isNull() && timeTmp.isValid())
-                    {cout <<"mniRowOd\n";
-
+                    {
                         if(time <= timeTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
-                    //}
                 }
+                //==============================================================================================================
+
                 else //String
-                { cout <<"isString\n";
+                {
                     QString string, stringTmp;
                     string = pole->getStrWartosc().trimmed();
 
-                    stringTmp = settings->value("wiekszeOd").toString();
+                    stringTmp = ustawienia_->value("wiekszeOd").toString();
                     if(!stringTmp.isEmpty())
                     {
                         if(string > stringTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
-                    stringTmp = settings->value("mniejszeOd").toString();
+
+                    stringTmp = ustawienia_->value("mniejszeOd").toString();
                     if(!stringTmp.isEmpty())
                     {
                         if(string < stringTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
-                    stringTmp = settings->value("rowne").toString();
+
+                    stringTmp = ustawienia_->value("rowne").toString();
                     if(!stringTmp.isEmpty())
                     {
                         if(string == stringTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
-                    stringTmp = settings->value("rozne").toString();
+
+                    stringTmp = ustawienia_->value("rozne").toString();
                     if(!stringTmp.isEmpty())
                     {
                         if(string > stringTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
-                    stringTmp = settings->value("wieRowOd").toString();
+
+                    stringTmp = ustawienia_->value("wieRowOd").toString();
                     if(!stringTmp.isEmpty())
                     {
                         if(string >= stringTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
-                    stringTmp = settings->value("mniRowOd").toString();
+
+                    stringTmp = ustawienia_->value("mniRowOd").toString();
                     if(!stringTmp.isEmpty())
                     {
                         if(string <= stringTmp)
-                        {wynik = wynik & true;}
+                        {
+                            wynik = wynik & true;
+                        }
                         else
-                        {wynik = wynik & false;}
+                        {
+                            wynik = wynik & false;
+                        }
                     }
-
                 }
-
-
+            }
+            else
+                wynik = wynik & false;
         }
-        else
-            wynik = wynik & false;
+        ustawienia_->endArray();
+        return wynik;
     }
-    settings->endArray();
-    return wynik;
-
+    return true;
 }
 
